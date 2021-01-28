@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import office from '../models/office.glb';
 
 class Application {
@@ -8,15 +9,16 @@ class Application {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
+  controls: OrbitControls;
 
   constructor(){
 
     this.loader = new GLTFLoader();
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.controls = new OrbitControls( this.camera, this.renderer.domElement );
     document.body.appendChild(this.renderer.domElement );
 
     // const widthFloor = 9;
@@ -37,6 +39,7 @@ class Application {
 
     this.camera.position.z = 5;
     this.camera.position.y = 2;
+    this.controls.update();
 
     this.loader.load(office, (gltf) => {
 
@@ -70,6 +73,7 @@ class Application {
     requestAnimationFrame(this.animate.bind(this) );
     // this.cube.rotation.x += 0.01;
     // this.cube.rotation.y += 0.01;
+    this.controls.update();
     this.renderer.render(this.scene, this.camera);
 
   }
